@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  radicale:
+    image: tomsquest/docker-radicale
+    container_name: radicale
+    ports:
+      - 127.0.0.1:5232:5232
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETUID
+      - SETGID
+      - CHOWN
+      - KILL
+    healthcheck:
+      test: curl -f http://127.0.0.1:5232 || exit 1
+      interval: 60s
+      retries: 3
+    restart: unless-stopped
+    volumes:
+      - /path/to/radicale-data:/data           # Replace with the directory for radicale data
+      - /etc/radicale/config:/config/config:ro # Radicale config file
+      - /etc/radicale/htpasswd:/htpasswd:ro    # Radicale htpasswd file (if any: used for basic, not secure, authentication)
