@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+  - name: Safely upgrades all packages
+    apt:
+      upgrade: safe
+      update_cache: yes
+      cache_valid_time: 3600 # Update the apt cache if it's older than 3600 seconds
+      autoclean: yes
+      autoremove: yes
+    become: yes
+    # Execute the task only on Debian-based hosts
+    when: ansible_facts['os_family'] == "Debian"
