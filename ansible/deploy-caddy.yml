@@ -1,0 +1,28 @@
+---
+- hosts: all
+  tasks:
+  - name: Create temporary download directory
+    tempfile:
+      state: directory
+    register: tempdir
+
+  - name: Download Caddy Debian package from official GitHub Page
+    get_url:
+      # Caddy 2.0.0 for Linux amd64 Debian package
+      url: https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.deb
+      dest: "{{ tempdir.path }}/caddy.deb"
+      # SHA-512 sum of the Debian package from the cheksums file of the GitHub release page
+      checksum: sha512:d376b00a832864653aabcbd959bab914e565de1ab49ac59f0b0a2ad0faaa59fb93c5c2078f5f7280f85847b9def98d78e9dc8cb13f07b60c7bcc8d1cac09bea3
+
+  - name: Install Caddy Debian package
+    apt:
+      deb: "{{ tempdir.path }}/caddy.deb"
+    become: yes
+    # Execute the task only on Debian-based hosts
+    when: ansible_facts['os_family'] == "Debian"
+
+  - name: Remove the temporary directory
+    file:
+      path: "{{ tempdir.path }}"
+      state: absent
+    when: tempdir.path is defined
