@@ -1,0 +1,18 @@
+version: "3"
+services:
+  mumble:
+    image: sudoforge/mumble-server:latest
+    ports:
+        - "64738:64738"
+    restart: unless-stopped
+    environment:
+        # https://github.com/sudoforge/docker-images/tree/master/mumble-server#configuration-options
+        - MUMBLE_ALLOWPING="false"
+        - MUMBLE_BANDWIDTH="100000"
+        #- MUMBLE_ENABLESSL="1"
+        - MUMBLE_REGISTERNAME="Example Mumble Server"
+        - MUMBLE_SENDVERSION="false"
+        - MUMBLE_SERVERPASSWORD="hunter2"
+        - MUMBLE_SSLCIPHERS="EECDH+AESGCM:EDH+aRSA+AESGCM:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA"
+        - MUMBLE_USERS="42"
+        - SUPERUSER_PASSWORD="hunter3"
