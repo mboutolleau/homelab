@@ -4,6 +4,6 @@ services:
     container_name: "letsencrypt-certbot-container"
     image: certbot/certbot
     volumes:
-      - ./certbot/letsencrypt/:/etc/letsencrypt/ # Certbot's config files and SSL certificates
-      - ./certbot/logs:/var/log/letsencrypt/     # Certbot's logs
-      - ./certbot/html:/var/www                  # Certbot's webroot, need to be served by a web server
+      - /path/to/certbot/letsencrypt/:/etc/letsencrypt/ # Certbot's config files and SSL certificates
+      - /path/to/certbot/logs:/var/log/letsencrypt/     # Certbot's logs
+      - /path/to/certbot/html:/var/www                  # Certbot's webroot, need to be served by a web server
