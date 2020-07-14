@@ -6,9 +6,17 @@ The Ansible inventory is static and written in the `hosts` file (not published o
 
 ## Playbooks
 
-- `deploy-alacritty-terminfo` : deploy the [Alacritty](https://github.com/alacritty/alacritty) [terminfo](https://www.man7.org/linux/man-pages/man5/terminfo.5.html) to a Linux host
-- `deploy-caddy.yml` : deploy the [Caddy web server](https://caddyserver.com/) v2.0.0 to a Debian based host  (uses a `.deb` package and the `apt` module)
-- `update-system.yml` : safely upgrades all packages of a Debian based host (uses the `apt` module)
+### `deploy-alacritty-terminfo`
+
+Deploy the [Alacritty](https://github.com/alacritty/alacritty) [terminfo](https://www.man7.org/linux/man-pages/man5/terminfo.5.html) to a Linux host.
+
+### `deploy-caddy.yml`
+
+Deploy the [Caddy web server](https://caddyserver.com/) v2 to a Debian based host (uses a `.deb` package and the `apt` module) along with a dummy configuration file and a sample `systemd` unit. See [../software/caddy](../software/caddy).
+
+### `update-system.yml`
+
+Safely upgrades all packages of a Debian based host (uses the `apt` module). Does not automatically restart a host if needed after the upgrade. 
 
 ## Usage
 

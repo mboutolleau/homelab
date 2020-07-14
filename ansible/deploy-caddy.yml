@@ -8,11 +8,11 @@
 
   - name: Download Caddy Debian package from official GitHub Page
     get_url:
-      # Caddy 2.0.0 for Linux amd64 Debian package
-      url: https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.deb
+      # Caddy 2.1.1 for Linux amd64 Debian package
+      url: https://github.com/caddyserver/caddy/releases/download/v2.1.1/caddy_2.1.1_linux_amd64.deb
       dest: "{{ tempdir.path }}/caddy.deb"
       # SHA-512 sum of the Debian package from the cheksums file of the GitHub release page
-      checksum: sha512:d376b00a832864653aabcbd959bab914e565de1ab49ac59f0b0a2ad0faaa59fb93c5c2078f5f7280f85847b9def98d78e9dc8cb13f07b60c7bcc8d1cac09bea3
+      checksum: sha512:7b22585c324ced73673bff743d2e19370873097ee852b253075918466f3074b988458d514d8d87f9bcc08b57949307c63831bffc99c0091cc6254f45961dd937
 
   - name: Install Caddy Debian package
     apt:
@@ -26,3 +26,32 @@
       path: "{{ tempdir.path }}"
       state: absent
     when: tempdir.path is defined
+
+  - name: Create caddy directory, if it does not exist
+    file:
+      path: /etc/caddy
+      state: directory
+      owner: root
+      group: root
+      mode: '0755'
+    become: yes
+
+  - name: Copy provided Caddyfile example
+    copy:
+      dest: /etc/caddy/Caddyfile
+      src: ../software/caddy/Caddyfile
+      # the file will only be transferred if the destination does not exist
+      force: no
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: Copy provided systemd unit
+    copy:
+      dest: /etc/systemd/system/caddy.service
+      src: ../software/caddy/caddy.service
+      # the file will only be transferred if the destination does not exist
+      force: no
+      owner: root
+      group: root
+      mode: '0644'
