@@ -1,0 +1,36 @@
+---
+- hosts: all
+  tasks:
+  - name: create a temporary download directory
+    tempfile:
+      state: directory
+      suffix: temp
+    register: tempdir
+    when: "ansible_system == 'Linux'"
+
+  - name: retrieve latest Alacritty terminfo file
+    get_url:
+      url: https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info
+      dest: "{{ tempdir.path }}/alacritty.info"
+    when:
+      - tempdir.path is defined
+      - "ansible_system == 'Linux'"
+
+  - name: install Alacritty terminfo file
+    shell: "tic -xe alacritty,alacritty-direct {{ tempdir.path | quote }}/alacritty.info"
+    become: yes
+    when:
+      - tempdir.path is defined
+      - "ansible_system == 'Linux'"
+
+  - name: remove the temporary download directory
+    file:
+      path: "{{ tempdir.path }}"
+      state: absent
+    when:
+      - tempdir.path is defined
+      - "ansible_system == 'Linux'"
+
+
+
+  
