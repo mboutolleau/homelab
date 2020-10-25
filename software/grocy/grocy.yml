@@ -11,4 +11,4 @@ services:
     volumes:
       - /etc/grocy:/config
     ports:
-      - 9283:80
+      - 127.0.0.1:9283:80
