@@ -2,13 +2,14 @@ version: "3"
 services:
   navidrome:
     image: deluan/navidrome:latest
+    container_name: navidrome
     ports:
       - "127.0.0.1:4533:4533"
     restart: unless-stopped
     environment:
       # https://www.navidrome.org/docs/usage/configuration-options/#enviroment-variables
       ND_SCANINTERVAL: 1m
-      ND_LOGLEVEL: info  
+      ND_LOGLEVEL: info
       ND_SESSIONTIMEOUT: 30m
       ND_BASEURL: ""
     volumes:

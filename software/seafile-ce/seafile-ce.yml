@@ -3,6 +3,7 @@ services:
   db:
     image: mariadb:latest
     container_name: seafile-mysql
+    restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=hunter2  # Requested, set the root's password of MySQL service.
       - MYSQL_LOG_CONSOLE=true
@@ -15,12 +16,14 @@ services:
     image: memcached:latest
     container_name: seafile-memcached
     entrypoint: memcached -m 256
+    restart: unless-stopped
     networks:
       - seafile-net
-          
+
   seafile:
     image: seafileltd/seafile-mc:latest
     container_name: seafile
+    restart: unless-stopped
     ports:
       - "127.0.0.1:8080:80"
     volumes:

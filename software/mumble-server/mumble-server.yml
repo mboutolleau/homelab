@@ -2,6 +2,7 @@ version: "3"
 services:
   mumble:
     image: sudoforge/mumble-server:latest
+    container_name: mumble-server
     ports:
         - "64738:64738"
     restart: unless-stopped
