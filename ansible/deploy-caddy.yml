@@ -8,11 +8,11 @@
 
   - name: Download Caddy Debian package from official GitHub Page
     get_url:
-      # Caddy 2.1.1 for Linux amd64 Debian package
-      url: https://github.com/caddyserver/caddy/releases/download/v2.1.1/caddy_2.1.1_linux_amd64.deb
+      # Debian package of Caddy 2.2.1 for Linux amd64
+      url: https://github.com/caddyserver/caddy/releases/download/v2.2.1/caddy_2.2.1_linux_amd64.deb
       dest: "{{ tempdir.path }}/caddy.deb"
       # SHA-512 sum of the Debian package from the cheksums file of the GitHub release page
-      checksum: sha512:7b22585c324ced73673bff743d2e19370873097ee852b253075918466f3074b988458d514d8d87f9bcc08b57949307c63831bffc99c0091cc6254f45961dd937
+      checksum: sha512:8160b2a886daef3bdb8166cf7328c19068e87b605b8d724ff424f4c3b2cf7bc96db0eec88ac3a9cbf473206d2441cfa37e4be6c8b5f9cd255650e83e1702b4df
 
   - name: Install Caddy Debian package
     apt:
