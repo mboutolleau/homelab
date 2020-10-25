@@ -18,6 +18,7 @@
     apt:
       deb: "{{ tempdir.path }}/caddy.deb"
     become: yes
+    register: deb_install_status
     # Execute the task only on Debian-based hosts
     when: ansible_facts['os_family'] == "Debian"
 
@@ -55,3 +56,19 @@
       owner: root
       group: root
       mode: '0644'
+    register: unit_copy_status
+
+  - name: Reload systemd daemon
+    systemd:
+      daemon_reload: yes
+    become: yes
+    # run only when a new systemd unit was copied
+    when: unit_copy_status.changed
+
+  - name: Restart Caddy service
+    systemd:
+      name: caddy
+      state: restarted
+    become: yes
+    # run only when a new Debian package was installed
+    when: deb_install_status.changed
