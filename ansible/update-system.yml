@@ -11,3 +11,41 @@
     become: yes
     # Execute the task only on Debian-based hosts
     when: ansible_facts['os_family'] == "Debian"
+
+  - name: List which packages were upgraded today
+    shell:
+      # Print lines of '/var/log/dpkg.log' written today and containing 'upgrade ', keeping only the part after 'upgrade '
+      cmd: grep -e '{{ ansible_date_time.date | quote }}.*upgrade ' /var/log/dpkg.log | sed -n -e 's/^.*upgrade //p'
+    register: upgraded_packages
+    when: ansible_date_time.date is defined
+
+  - name: Print which packages were upgraded today
+    debug:
+      msg: "{{ upgraded_packages.stdout_lines }}"
+    when:
+      - upgraded_packages.rc == 0
+      - upgraded_packages.stdout_lines is defined
+
+  - name: Check if a reboot is required
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required
+
+  - name: List which packages require a reboot
+    slurp:
+      src: /var/run/reboot-required.pkgs
+    register: reboot_pkgs
+    when: reboot_required.stat.exists
+
+  - name: Print which packages require a reboot
+    debug:
+      msg: "{{ reboot_pkgs['content'] | b64decode }}"
+    when:
+      - reboot_required.stat.exists
+      - reboot_pkgs is defined
+
+  - name: Reboot managed host
+    reboot:
+    become: yes
+    when: 
+      - reboot_required.stat.exists

@@ -16,7 +16,7 @@ Deploy the [Caddy web server](https://caddyserver.com/) v2 to a Debian based hos
 
 ### `update-system.yml`
 
-Safely upgrades all packages of a Debian based host (uses the `apt` module). Does not automatically restart a host if needed after the upgrade. 
+Safely upgrades all packages of a Debian based host (uses the `apt` module). Automatically restart a host, only if needed, after the upgrade. 
 
 ## Usage
 
