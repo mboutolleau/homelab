@@ -1,5 +1,9 @@
 ---
 - hosts: all
+  vars:
+    caddy_version: "2.3.0"
+    caddy_checksum: "e86fc81a8c8c543ef9ec7ade089659cacdb573b34594a248ff0fa5d64e0a7b1aa5418d9d90b503b99ea32d3ad3c7427f3d5b9117a9c4941aed3d6fbd0d5f2989"
+
   tasks:
   - name: Create temporary download directory
     tempfile:
@@ -8,11 +12,11 @@
 
   - name: Download Caddy Debian package from official GitHub Page
     get_url:
-      # Debian package of Caddy 2.2.1 for Linux amd64
-      url: https://github.com/caddyserver/caddy/releases/download/v2.2.1/caddy_2.2.1_linux_amd64.deb
+      # Caddy Debian package for Linux amd64
+      url: "https://github.com/caddyserver/caddy/releases/download/v{{ caddy_version }}/caddy_{{ caddy_version }}_linux_amd64.deb"
       dest: "{{ tempdir.path }}/caddy.deb"
       # SHA-512 sum of the Debian package from the cheksums file of the GitHub release page
-      checksum: sha512:8160b2a886daef3bdb8166cf7328c19068e87b605b8d724ff424f4c3b2cf7bc96db0eec88ac3a9cbf473206d2441cfa37e4be6c8b5f9cd255650e83e1702b4df
+      checksum: "sha512:{{ caddy_checksum }}"
 
   - name: Install Caddy Debian package
     apt:
@@ -41,7 +45,7 @@
     copy:
       dest: /etc/caddy/Caddyfile
       src: ../software/caddy/Caddyfile
-      # the file will only be transferred if the destination does not exist
+      # The file will only be transferred if the destination does not exist
       force: no
       owner: root
       group: root
@@ -51,7 +55,7 @@
     copy:
       dest: /etc/systemd/system/caddy.service
       src: ../software/caddy/caddy.service
-      # the file will only be transferred if the destination does not exist
+      # The file will only be transferred if the destination does not exist
       force: no
       owner: root
       group: root
@@ -62,7 +66,7 @@
     systemd:
       daemon_reload: yes
     become: yes
-    # run only when a new systemd unit was copied
+    # Run only when a new systemd unit was copied
     when: unit_copy_status.changed
 
   - name: Restart Caddy service
@@ -70,5 +74,5 @@
       name: caddy
       state: restarted
     become: yes
-    # run only when a new Debian package was installed
+    # Run only when a new Debian package was installed
     when: deb_install_status.changed
