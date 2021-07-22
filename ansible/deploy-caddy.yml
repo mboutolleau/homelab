@@ -1,8 +1,8 @@
 ---
 - hosts: all
   vars:
-    caddy_version: "2.3.0"
-    caddy_checksum: "e86fc81a8c8c543ef9ec7ade089659cacdb573b34594a248ff0fa5d64e0a7b1aa5418d9d90b503b99ea32d3ad3c7427f3d5b9117a9c4941aed3d6fbd0d5f2989"
+    caddy_version: "2.4.3"
+    caddy_checksum: "d79d27890418816c2d30d4d01706fba21b6882bd15f268efeebd63b01a44c5d9fdd5eca59caf953f17f3c2c297e757867c1a2280274cebf54c973a2fcbabcb81"
 
   tasks:
   - name: Create temporary download directory
